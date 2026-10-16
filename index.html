@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-title" content="Well-being">
 <meta name="application-name" content="Well-being">
 <meta name="format-detection" content="telephone=no">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%238ef5a8'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='white'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%238ef5a8'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='white'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0f16'/%3E%3Ccircle cx='50' cy='50' r='30' fill='%238ef5a8'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d0f16'/%3E%3Ccircle cx='50' cy='50' r='30' fill='%238ef5a8'/%3E%3C/svg%3E">
 <title>Well-being Tracker</title>
 <style>
 :root{color-scheme:dark;--bg:#0d0f16;--card:#181b26;--ink:#f4f5fa;--muted:#9ba1b8;--line:#2a2f42;--accent:#8ef5a8;--on-accent:#06240f;--accent2:#ffb21e;--green:#2dd4bf;--blue:#5aa2ff;--purple:#b26bff;--red:#ff4d5e;--r:18px;--nav:68px}
@@ -51,11 +51,11 @@ ul.list li .t span{font-size:13px;color:var(--muted)}
 ul.list li .v{font-weight:700;white-space:nowrap}
 .dayhead{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:14px 4px 2px;display:flex;justify-content:space-between}
 .empty{text-align:center;padding:26px 10px;color:var(--muted)}
-.empty .e{font-size:38px;margin-bottom:6px}
+.empty .e{margin-bottom:8px;opacity:.85}.ico{display:inline-block;vertical-align:middle;flex:none}.lic{width:28px;display:grid;place-items:center;flex:none}h2 .ico{margin-right:2px}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:7;background:rgba(20,23,33,.96);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 nav button{flex:1;height:var(--nav);border:0;background:none;font-size:11px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer}
-nav button .i{font-size:22px;filter:grayscale(1);opacity:.6}
-nav button.on{color:var(--accent)}nav button.on .i{filter:none;opacity:1}
+nav button .i{display:block;height:24px;color:#5d6480}
+nav button.on{color:var(--ink)}nav button.on .i{color:var(--c)}
 label{display:block;font-size:14px;font-weight:600;margin:12px 0 6px;color:#c9cde0}
 input,select,textarea{width:100%;min-height:50px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:17px;background:#11141d;color:var(--ink);font-family:inherit;-webkit-appearance:none;appearance:none}
 textarea{min-height:70px;resize:vertical}
@@ -84,7 +84,7 @@ svg.chart{width:100%;height:auto;display:block}
 <body>
 <header>
   <div><h1 id="title">Today</h1><div class="sub" id="subtitle"></div></div>
-  <button class="iconbtn" id="settingsBtn" aria-label="Settings">⚙️</button>
+  <button class="iconbtn" id="settingsBtn" aria-label="Settings"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="#9ba1b8" aria-hidden="true"><circle cx="5" cy="12" r="2.6"/><circle cx="12" cy="12" r="2.6"/><circle cx="19" cy="12" r="2.6"/></svg></button>
 </header>
 <main>
   <section class="view" id="v-home"></section>
@@ -96,11 +96,11 @@ svg.chart{width:100%;height:auto;display:block}
 </main>
 <button class="fab" id="fab" aria-label="Add entry">+</button>
 <nav id="nav">
-  <button data-v="home"><span class="i">🏠</span>Home</button>
-  <button data-v="carbs"><span class="i">🥗</span>Food</button>
-  <button data-v="exercise"><span class="i">🏃</span>Exercise</button>
-  <button data-v="weight"><span class="i">⚖️</span>Weight</button>
-  <button data-v="money"><span class="i">💰</span>Money</button>
+  <button data-v="home" style="--c:var(--accent)"><span class="i"><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12,2.5 21.5,10 21.5,21 2.5,21 2.5,10"/></svg></span>Home</button>
+  <button data-v="carbs" style="--c:var(--accent2)"><span class="i"><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></span>Food</button>
+  <button data-v="exercise" style="--c:var(--green)"><span class="i"><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12,3 21.5,20 2.5,20"/></svg></span>Exercise</button>
+  <button data-v="weight" style="--c:var(--blue)"><span class="i"><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12,2 22,12 12,22 2,12"/></svg></span>Weight</button>
+  <button data-v="money" style="--c:var(--purple)"><span class="i"><svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12,2 20.7,7 20.7,17 12,22 3.3,17 3.3,7"/></svg></span>Money</button>
 </nav>
 <div class="sheet-bg" id="sheetBg"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
@@ -108,6 +108,9 @@ svg.chart{width:100%;height:auto;display:block}
 <script>
 (function(){
 "use strict";
+var SHAPES={"food": "<circle cx=\"12\" cy=\"12\" r=\"9\"/>", "fast": "<polygon points=\"5,3 19,3 12,12\"/><polygon points=\"5,21 19,21 12,12\" opacity=\".55\"/>", "ex": "<polygon points=\"12,3 21.5,20 2.5,20\"/>", "weight": "<polygon points=\"12,2 22,12 12,22 2,12\"/>", "money": "<polygon points=\"12,2 20.7,7 20.7,17 12,22 3.3,17 3.3,7\"/>", "home": "<polygon points=\"12,2.5 21.5,10 21.5,21 2.5,21 2.5,10\"/>", "dots": "<circle cx=\"5\" cy=\"12\" r=\"2.6\"/><circle cx=\"12\" cy=\"12\" r=\"2.6\"/><circle cx=\"19\" cy=\"12\" r=\"2.6\"/>", "backup": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"4.5\" rx=\"1.5\"/><rect x=\"3\" y=\"10\" width=\"18\" height=\"4.5\" rx=\"1.5\" opacity=\".7\"/><rect x=\"3\" y=\"16\" width=\"18\" height=\"4.5\" rx=\"1.5\" opacity=\".45\"/>", "square": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"3\"/>", "up": "<polygon points=\"12,4 21,19 3,19\"/>", "down": "<polygon points=\"3,5 21,5 12,20\"/>", "dot": "<circle cx=\"12\" cy=\"12\" r=\"6\"/>"};
+function ic(k,c,sz){return'<svg class="ico" width="'+(sz||18)+'" height="'+(sz||18)+'" viewBox="0 0 24 24" fill="'+(c||'currentColor')+'" aria-hidden="true">'+SHAPES[k]+'</svg>'}
+function ok(){return' <span title="Goal met">'+ic('dot','var(--accent)',10)+'</span>'}
 var KEY='wellbeingTracker.v1';
 var DEFAULTS={settings:{carbTarget:100,fastGoal:14,fastStart:null,weeklyExercise:135,unit:'lb',startWeight:null,goalWeight:165,monthlyBudget:null,shortName:'Short-term goal',shortGoal:3000,longName:'Long-term goal',longGoal:15000},carbs:[],exercise:[],weights:[],money:[],savings:[]};
 var EX_TYPES=['Weight lifting','Walking','Calisthenics','Other'];
@@ -171,15 +174,15 @@ function fastStartInfo(){var l=lastMealTs(),m=S.settings.fastStart,n=Date.now();
 function fmtDur(ms){var m=Math.max(0,Math.floor(ms/60000));return Math.floor(m/60)+'h '+pad(m%60)+'m'}
 function fmtWhen(ts){var d=new Date(ts),s=iso(d);return(s===today()?'today':fmtDay(s).toLowerCase()==='yesterday'?'yesterday':fmtShort(s))+' at '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}
 function fastCard(go){var g=S.settings.fastGoal||0,gm=g*3600000,fi=fastStartInfo(),on=overnightFast(today());
-  var h='<div class="card"'+(go?' data-go="carbs"':'')+'><h2><span class="dot" style="background:rgba(142,245,168,.16)">⏳</span>Fasting<span class="tag">Goal '+g+' h</span></h2>';
+  var h='<div class="card"'+(go?' data-go="carbs"':'')+'><h2><span class="dot" style="background:rgba(142,245,168,.16)">'+ic('fast','var(--accent)',16)+'</span>Fasting<span class="tag">Goal '+g+' h</span></h2>';
   if(!fi&&on==null)return h+'<div class="muted">Log meals with a time and your overnight fast (last meal → first meal) will show here.</div>'+fastBtns()+'</div>';
-  if(fi){var el=Date.now()-fi.ts;h+='<div class="big" id="liveFast">'+fmtDur(el)+' <small>fasting now</small></div>'+bar(pct(el,gm),'var(--accent)')+'<div class="muted">'+(fi.manual?'Fast started ':'Since last meal ')+fmtWhen(fi.ts)+(el>=gm&&gm>0?' · 🎉 goal reached':gm>0?' · '+fmtDur(gm-el)+' to goal':'')+'</div>'}
-  h+='<div class="muted" style="margin-top:10px">Overnight fast today: <b style="color:var(--ink)">'+(on!=null?fmtDur(on)+(gm>0&&on>=gm?' ✓':''):'—')+'</b>'+(on==null?' <span>(needs yesterday\'s last meal + today\'s first meal)</span>':'')+'</div>';
+  if(fi){var el=Date.now()-fi.ts;h+='<div class="big" id="liveFast">'+fmtDur(el)+' <small>fasting now</small></div>'+bar(pct(el,gm),'var(--accent)')+'<div class="muted">'+(fi.manual?'Fast started ':'Since last meal ')+fmtWhen(fi.ts)+(el>=gm&&gm>0?' · goal reached'+ok():gm>0?' · '+fmtDur(gm-el)+' to goal':'')+'</div>'}
+  h+='<div class="muted" style="margin-top:10px">Overnight fast today: <b style="color:var(--ink)">'+(on!=null?fmtDur(on)+(gm>0&&on>=gm?ok():''):'—')+'</b>'+(on==null?' <span>(needs yesterday\'s last meal + today\'s first meal)</span>':'')+'</div>';
   return h+fastBtns()+'</div>'}
-function fastBtns(){return'<div class="fbtns"><button class="ghost" data-fast="start">⏱ Start fast now</button>'+(S.settings.fastStart?'<button class="ghost" data-fast="clear">Clear manual start</button>':'')+'</div>'}
+function fastBtns(){return'<div class="fbtns"><button class="ghost" data-fast="start">'+ic('fast','var(--accent)',16)+' Start fast now</button>'+(S.settings.fastStart?'<button class="ghost" data-fast="clear">Clear manual start</button>':'')+'</div>'}
 function fastHistory(){var g=S.settings.fastGoal||0,gm=g*3600000,h='<div class="card"><h2>Overnight fasts<span class="tag">last 7 days</span></h2>',any=false;
   for(var i=0;i<7;i++){var d=new Date();d.setDate(d.getDate()-i);var s=iso(d),f=overnightFast(s);if(f!=null)any=true;
-    h+='<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>'+fmtDay(s)+'</span><b>'+(f!=null?fmtDur(f)+(gm>0&&f>=gm?' ✓':''):'<span class="muted">—</span>')+'</b></div>'+bar(f!=null?pct(f,gm||1):0,gm>0&&f>=gm?'var(--accent)':'#6b7390')+'</div>'}
+    h+='<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>'+fmtDay(s)+'</span><b>'+(f!=null?fmtDur(f)+(gm>0&&f>=gm?ok():''):'<span class="muted">—</span>')+'</b></div>'+bar(f!=null?pct(f,gm||1):0,gm>0&&f>=gm?'var(--accent)':'#6b7390')+'</div>'}
   if(!any)h+='<p class="note">Each day\'s fast is measured from the previous day\'s last meal to that day\'s first meal.</p>';
   return h+'</div>'}
 setInterval(function(){if((current==='home'||current==='carbs')&&!document.getElementById('sheetBg').classList.contains('open'))render()},30000);
@@ -193,22 +196,22 @@ function render(){
   ({home:rHome,carbs:rCarbs,exercise:rExercise,weight:rWeight,money:rMoney,settings:rSettings})[current]();
 }
 function carbCard(){var t=carbsOn(today()),g=S.settings.carbTarget||0,left=g-t;
-  return'<div class="card" data-go="carbs"><h2><span class="dot" style="background:rgba(255,178,30,.18)">🥗</span>Carbs today<span class="tag">Goal '+g+' g</span></h2><div class="big">'+r1(t)+' <small>/ '+g+' g</small></div>'+bar(pct(t,g),t>g?'var(--red)':'var(--accent2)')+'<div class="muted">'+(t===0&&!S.carbs.some(function(e){return e.date===today()})?'Nothing logged yet today. Tap to add a meal.':left>=0?r1(left)+' g left today':'<span class="neg">'+r1(-left)+' g over target</span>')+'</div></div>'}
+  return'<div class="card" data-go="carbs"><h2><span class="dot" style="background:rgba(255,178,30,.18)">'+ic('food','var(--accent2)',16)+'</span>Carbs today<span class="tag">Goal '+g+' g</span></h2><div class="big">'+r1(t)+' <small>/ '+g+' g</small></div>'+bar(pct(t,g),t>g?'var(--red)':'var(--accent2)')+'<div class="muted">'+(t===0&&!S.carbs.some(function(e){return e.date===today()})?'Nothing logged yet today. Tap to add a meal.':left>=0?r1(left)+' g left today':'<span class="neg">'+r1(-left)+' g over target</span>')+'</div></div>'}
 function exCard(){var m=weekExercise(),g=S.settings.weeklyExercise||0;
-  return'<div class="card" data-go="exercise"><h2><span class="dot" style="background:rgba(45,212,191,.18)">🏃</span>Exercise this week<span class="tag">Goal '+g+' min</span></h2><div class="big">'+m+' <small>/ '+g+' min</small></div>'+bar(pct(m,g),'var(--green)')+'<div class="muted">'+(m===0?'No workouts yet this week. Every minute counts!':m>=g?'🎉 Weekly goal reached!':(g-m)+' min to go this week')+'</div></div>'}
+  return'<div class="card" data-go="exercise"><h2><span class="dot" style="background:rgba(45,212,191,.18)">'+ic('ex','var(--green)',16)+'</span>Exercise this week<span class="tag">Goal '+g+' min</span></h2><div class="big">'+m+' <small>/ '+g+' min</small></div>'+bar(pct(m,g),'var(--green)')+'<div class="muted">'+(m===0?'No workouts yet this week. Every minute counts!':m>=g?'Weekly goal reached!'+ok():(g-m)+' min to go this week')+'</div></div>'}
 function wCard(){var l=latestWeight(),st=startWeight(),gw=S.settings.goalWeight,u=unit();
-  var h='<div class="card" data-go="weight"><h2><span class="dot" style="background:rgba(90,162,255,.18)">⚖️</span>Weight<span class="tag">Goal '+(gw!=null?toDisp(gw)+' '+u:'not set')+'</span></h2>';
+  var h='<div class="card" data-go="weight"><h2><span class="dot" style="background:rgba(90,162,255,.18)">'+ic('weight','var(--blue)',16)+'</span>Weight<span class="tag">Goal '+(gw!=null?toDisp(gw)+' '+u:'not set')+'</span></h2>';
   if(!l)return h+'<div class="muted">Log your first weigh-in to start tracking progress.</div></div>';
   h+='<div class="big">'+toDisp(l.lbs)+' <small>'+u+' · '+fmtDay(l.date)+'</small></div>';
   if(gw!=null&&st!=null&&st!==gw){var p=pct(st-l.lbs,st-gw);h+=bar(p,'var(--blue)')+'<div class="muted">'+(st>gw?r1(toDisp(st)-toDisp(l.lbs))+' '+u+' lost · '+Math.max(0,r1(toDisp(l.lbs)-toDisp(gw)))+' '+u+' to go':Math.round(p)+'% to goal')+'</div>'}
   return h+'</div>'}
 function mCard(){var t=monthTotals(),b=S.settings.monthlyBudget;
-  var h='<div class="card" data-go="money"><h2><span class="dot" style="background:rgba(178,107,255,.2)">💰</span>Money this month</h2>';
+  var h='<div class="card" data-go="money"><h2><span class="dot" style="background:rgba(178,107,255,.2)">'+ic('money','var(--purple)',16)+'</span>Money this month</h2>';
   if(b){h+='<div class="big">'+money(t.exp)+' <small>/ '+money(b)+' budget</small></div>'+bar(pct(t.exp,b),t.exp>b?'var(--red)':'var(--purple)')+'<div class="muted">'+(t.exp<=b?money(b-t.exp)+' left to spend':'<span class="neg">'+money(t.exp-b)+' over budget</span>')+'</div>'}
   else h+='<div class="big">'+money(t.exp)+' <small>spent</small></div><div class="muted">Income '+money(t.inc)+' · no monthly budget set</div>';
   h+=savingsMini()+'</div>';return h}
 function savingsMini(){return['short','long'].map(function(k){var s=saved(k),g=S.settings[k+'Goal']||0;return'<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:14px"><b>'+esc(S.settings[k+'Name'])+'</b><span class="muted">'+money(s)+' / '+money(g)+'</span></div>'+bar(pct(s,g),k==='short'?'var(--accent2)':'var(--green)')+'</div>'}).join('')}
-function rHome(){document.getElementById('v-home').innerHTML=carbCard()+fastCard(true)+exCard()+wCard()+mCard()+'<p class="note" style="text-align:center">Your data stays on this device. Back it up from ⚙️ Settings.</p>'}
+function rHome(){document.getElementById('v-home').innerHTML=carbCard()+fastCard(true)+exCard()+wCard()+mCard()+'<p class="note" style="text-align:center">Your data stays on this device. Back it up in Settings ('+ic('dots','#9ba1b8',14)+').</p>'}
 
 function listItems(items,fn){return'<ul class="list">'+items.map(fn).join('')+'</ul>'}
 function rCarbs(){var t=today(),h=carbCard().replace('data-go="carbs"','')+fastCard(false)+fastHistory();
@@ -217,17 +220,17 @@ function rCarbs(){var t=today(),h=carbCard().replace('data-go="carbs"','')+fastC
   var g=S.settings.carbTarget||1,mx=Math.max(g,Math.max.apply(null,days.map(carbsOn)))||1;
   h+='<div class="card"><h2>Last 7 days</h2><svg class="chart" viewBox="0 0 350 130">'+'<line x1="0" x2="350" y1="'+(110-g/mx*95)+'" y2="'+(110-g/mx*95)+'" stroke="#8ef5a8" stroke-dasharray="4 4" stroke-width="1.5"/>'+days.map(function(d,i){var v=carbsOn(d),bh=v/mx*95,x=i*50+12;return'<rect x="'+x+'" y="'+(110-bh)+'" width="26" height="'+bh+'" rx="6" fill="'+(v>g?'#ff4d5e':'#ffb21e')+'"/><text x="'+(x+13)+'" y="126" font-size="11" text-anchor="middle" fill="#9ba1b8">'+parse(d).toLocaleDateString(undefined,{weekday:'narrow'})+'</text>'+(v?'<text x="'+(x+13)+'" y="'+(105-bh)+'" font-size="10" text-anchor="middle" fill="#e3e6f2">'+Math.round(v)+'</text>':'')}).join('')+'</svg></div>';
   h+='<div class="card"><h2>History</h2>';
-  if(!S.carbs.length)h+=emptyBox('🍽️','No meals logged yet.<br>Tap <b>+</b> to add what you ate and its carbs.');
+  if(!S.carbs.length)h+=emptyBox(ic('food','var(--accent2)',40),'No meals logged yet.<br>Tap <b>+</b> to add what you ate and its carbs.');
   else groupByDay(S.carbs).forEach(function(g){g.items.sort(byTime);h+='<div class="dayhead"><span>'+fmtDay(g.date)+'</span><span>'+r1(carbsOn(g.date))+' g</span></div>'+listItems(g.items,function(e){return'<li data-edit="carbs" data-id="'+e.id+'"><div class="tm">'+(e.time?fmtTime(e.time):'no time')+'</div><div class="t"><b>'+esc(e.food||'Food')+'</b><span>'+esc(e.meal||'')+'</span></div><div class="v">'+r1(+e.carbs)+' g</div></li>'})});
   document.getElementById('v-carbs').innerHTML=h+'</div>'}
 function exDetail(e){var p=[];if(e.type==='Weight lifting'){if(e.sets)p.push(e.sets+' sets');if(e.reps)p.push(e.reps+' reps');if(e.liftWeight)p.push(esc(e.liftWeight))}if(e.type==='Walking'){if(e.distance)p.push(e.distance+' mi');if(e.steps)p.push((+e.steps).toLocaleString()+' steps')}if(e.notes)p.push(esc(e.notes));return p.join(' · ')}
-function exIcon(t){return{'Weight lifting':'🏋️','Walking':'🚶','Calisthenics':'🤸'}[t]||'⭐'}
+function exIcon(t){return ic({'Weight lifting':'square','Walking':'food','Calisthenics':'ex'}[t]||'weight','var(--green)',20)}
 function rExercise(){var h=exCard().replace('data-go="exercise"','');
   var wk=S.exercise.filter(function(e){return inThisWeek(e.date)}),by={};wk.forEach(function(e){var k=e.type==='Other'?(e.custom||'Other'):e.type;by[k]=(by[k]||0)+(+e.minutes||0)});
   var ks=Object.keys(by);if(ks.length)h+='<div class="card"><h2>This week by activity</h2><div class="grid2">'+ks.map(function(k){return'<div class="stat"><b>'+by[k]+' min</b><span>'+esc(k)+'</span></div>'}).join('')+'</div></div>';
   h+='<div class="card"><h2>History</h2>';
-  if(!S.exercise.length)h+=emptyBox('👟','No workouts logged yet.<br>Tap <b>+</b> to log a walk, lift, or calisthenics session.');
-  else groupByDay(S.exercise).forEach(function(g){h+='<div class="dayhead"><span>'+fmtDay(g.date)+'</span><span>'+g.items.reduce(function(s,e){return s+(+e.minutes||0)},0)+' min</span></div>'+listItems(g.items,function(e){return'<li data-edit="exercise" data-id="'+e.id+'"><span style="font-size:22px">'+exIcon(e.type)+'</span><div class="t"><b>'+esc(e.type==='Other'?(e.custom||'Other'):e.type)+'</b><span>'+(exDetail(e)||'&nbsp;')+'</span></div><div class="v">'+(+e.minutes)+' min</div></li>'})});
+  if(!S.exercise.length)h+=emptyBox(ic('ex','var(--green)',40),'No workouts logged yet.<br>Tap <b>+</b> to log a walk, lift, or calisthenics session.');
+  else groupByDay(S.exercise).forEach(function(g){h+='<div class="dayhead"><span>'+fmtDay(g.date)+'</span><span>'+g.items.reduce(function(s,e){return s+(+e.minutes||0)},0)+' min</span></div>'+listItems(g.items,function(e){return'<li data-edit="exercise" data-id="'+e.id+'"><span class="lic">'+exIcon(e.type)+'</span><div class="t"><b>'+esc(e.type==='Other'?(e.custom||'Other'):e.type)+'</b><span>'+(exDetail(e)||'&nbsp;')+'</span></div><div class="v">'+(+e.minutes)+' min</div></li>'})});
   document.getElementById('v-exercise').innerHTML=h+'</div>'}
 function chart(){var w=sortedWeights();if(w.length<2)return'<div class="muted" style="padding:10px 0">'+(w.length?'Add one more weigh-in to see your trend line.':'Your trend chart will appear here.')+'</div>';
   var W=350,H=180,pl=34,pr=10,pt=12,pb=24,gw=S.settings.goalWeight;
@@ -245,9 +248,9 @@ function chart(){var w=sortedWeights();if(w.length<2)return'<div class="muted" s
   s+='<text x="'+pl+'" y="'+(H-6)+'" font-size="10" fill="#9ba1b8">'+fmtShort(w[0].date)+'</text><text x="'+(W-pr)+'" y="'+(H-6)+'" font-size="10" text-anchor="end" fill="#9ba1b8">'+fmtShort(w[w.length-1].date)+'</text></svg>';return s}
 function rWeight(){var h=wCard().replace('data-go="weight"',''),u=unit(),l=latestWeight(),st=startWeight(),gw=S.settings.goalWeight;
   h+='<div class="card"><h2>Trend<span class="tag"><span class="seg" style="display:inline-flex;padding:3px"><button data-unit="lb" class="'+(u==='lbs'?'on':'')+'" style="min-height:32px;padding:0 12px">lbs</button><button data-unit="kg" class="'+(u==='kg'?'on':'')+'" style="min-height:32px;padding:0 12px">kg</button></span></span></h2>'+chart();
-  h+='<div class="grid2" style="margin-top:10px"><div class="stat"><b>'+(st!=null?toDisp(st)+' '+u:'—')+'</b><span>Start'+(S.settings.startWeight==null&&st!=null?' (first entry)':'')+'</span></div><div class="stat"><b>'+(gw!=null?toDisp(gw)+' '+u:'—')+'</b><span>Goal</span></div><div class="stat"><b>'+(l&&st!=null?(r1(toDisp(l.lbs)-toDisp(st))>0?'+':'')+r1(toDisp(l.lbs)-toDisp(st))+' '+u:'—')+'</b><span>Change since start</span></div><div class="stat"><b>'+(l&&gw!=null?Math.max(0,r1(toDisp(l.lbs)-toDisp(gw)))+' '+u:'—')+'</b><span>To goal</span></div></div><p class="note">Edit start & goal weight in ⚙️ Settings.</p></div>';
+  h+='<div class="grid2" style="margin-top:10px"><div class="stat"><b>'+(st!=null?toDisp(st)+' '+u:'—')+'</b><span>Start'+(S.settings.startWeight==null&&st!=null?' (first entry)':'')+'</span></div><div class="stat"><b>'+(gw!=null?toDisp(gw)+' '+u:'—')+'</b><span>Goal</span></div><div class="stat"><b>'+(l&&st!=null?(r1(toDisp(l.lbs)-toDisp(st))>0?'+':'')+r1(toDisp(l.lbs)-toDisp(st))+' '+u:'—')+'</b><span>Change since start</span></div><div class="stat"><b>'+(l&&gw!=null?Math.max(0,r1(toDisp(l.lbs)-toDisp(gw)))+' '+u:'—')+'</b><span>To goal</span></div></div><p class="note">Edit start & goal weight in Settings ('+ic('dots','#9ba1b8',14)+').</p></div>';
   h+='<div class="card"><h2>Weigh-ins</h2>';
-  if(!S.weights.length)h+=emptyBox('📉','No weigh-ins yet.<br>Tap <b>+</b> to log today\'s weight.');
+  if(!S.weights.length)h+=emptyBox(ic('weight','var(--blue)',40),'No weigh-ins yet.<br>Tap <b>+</b> to log today\'s weight.');
   else{var sw=sortedWeights();h+=listItems(sw.slice().reverse(),function(e){var i=sw.indexOf(e),d=i>0?r1(toDisp(e.lbs)-toDisp(sw[i-1].lbs)):null;return'<li data-edit="weights" data-id="'+e.id+'"><div class="t"><b>'+fmtDay(e.date)+'</b><span>'+(d==null?'First entry':(d>0?'+':'')+d+' '+u+' vs previous')+'</span></div><div class="v">'+toDisp(e.lbs)+' '+u+'</div></li>'})}
   document.getElementById('v-weight').innerHTML=h+'</div>'}
 var moneyTab='all';
@@ -260,16 +263,16 @@ function rMoney(){var h=mCard().replace('data-go="money"',''),t=monthTotals();
   h+='<div class="card"><h2>Transactions</h2><div class="seg" style="margin-bottom:8px">'+[['all','All'],['expense','Expenses'],['income','Income'],['savings','Savings']].map(function(x){return'<button data-mtab="'+x[0]+'" class="'+(moneyTab===x[0]?'on':'')+'">'+x[1]+'</button>'}).join('')+'</div>';
   var items=moneyTab==='savings'?S.savings.map(function(e){return Object.assign({_t:'savings'},e)}):S.money.filter(function(e){return moneyTab==='all'||e.kind===moneyTab}).map(function(e){return Object.assign({_t:'money'},e)});
   if(moneyTab==='all')items=items.concat(S.savings.map(function(e){return Object.assign({_t:'savings'},e)}));
-  if(!items.length)h+=emptyBox('🧾','Nothing here yet.<br>Tap <b>+</b> to log income or an expense.');
-  else groupByDay(items).forEach(function(g){h+='<div class="dayhead"><span>'+fmtDay(g.date)+'</span></div>'+listItems(g.items,function(e){if(e._t==='savings')return'<li data-edit="savings" data-id="'+e.id+'"><span style="font-size:22px">🐷</span><div class="t"><b>'+esc(S.settings[e.goal+'Name'])+'</b><span>'+(esc(e.note)||'Savings contribution')+'</span></div><div class="v pos">'+money(+e.amount)+'</div></li>';return'<li data-edit="money" data-id="'+e.id+'"><span style="font-size:22px">'+(e.kind==='income'?'💵':'🛒')+'</span><div class="t"><b>'+esc(e.category)+'</b><span>'+(esc(e.note)||(e.kind==='income'?'Income':'Expense'))+'</span></div><div class="v '+(e.kind==='income'?'pos':'')+'">'+(e.kind==='income'?'+':'-')+money(+e.amount)+'</div></li>'})});
+  if(!items.length)h+=emptyBox(ic('money','var(--purple)',40),'Nothing here yet.<br>Tap <b>+</b> to log income or an expense.');
+  else groupByDay(items).forEach(function(g){h+='<div class="dayhead"><span>'+fmtDay(g.date)+'</span></div>'+listItems(g.items,function(e){if(e._t==='savings')return'<li data-edit="savings" data-id="'+e.id+'"><span class="lic">'+ic('dot',e.goal==='short'?'var(--accent2)':'var(--accent)',20)+'</span><div class="t"><b>'+esc(S.settings[e.goal+'Name'])+'</b><span>'+(esc(e.note)||'Savings contribution')+'</span></div><div class="v pos">'+money(+e.amount)+'</div></li>';return'<li data-edit="money" data-id="'+e.id+'"><span class="lic">'+(e.kind==='income'?ic('up','var(--green)',18):ic('down','var(--purple)',18))+'</span><div class="t"><b>'+esc(e.category)+'</b><span>'+(esc(e.note)||(e.kind==='income'?'Income':'Expense'))+'</span></div><div class="v '+(e.kind==='income'?'pos':'')+'">'+(e.kind==='income'?'+':'-')+money(+e.amount)+'</div></li>'})});
   document.getElementById('v-money').innerHTML=h+'</div>'}
 function rSettings(){var s=S.settings,u=unit();
-  document.getElementById('v-settings').innerHTML='<form id="setForm"><div class="card"><h2>🥗 Food &amp; fasting</h2><label for="s-carb">Daily carb target (g)</label><input id="s-carb" type="number" inputmode="numeric" min="0" step="1" value="'+(s.carbTarget??'')+'"><label for="s-fast">Daily fasting goal (hours)</label><input id="s-fast" type="number" inputmode="decimal" min="0" max="48" step="0.5" value="'+(s.fastGoal??'')+'"><p class="note">Fasting = overnight gap from the previous day\'s last meal to the day\'s first meal (meals need a time).</p></div>'+
-  '<div class="card"><h2>🏃 Exercise</h2><label for="s-ex">Weekly exercise goal (minutes)</label><input id="s-ex" type="number" inputmode="numeric" min="0" step="1" value="'+(s.weeklyExercise??'')+'"><p class="note">Weeks run Monday to Sunday.</p></div>'+
-  '<div class="card"><h2>⚖️ Weight</h2><label>Units</label><div class="seg"><button type="button" data-unit="lb" class="'+(u==='lbs'?'on':'')+'">lbs</button><button type="button" data-unit="kg" class="'+(u==='kg'?'on':'')+'">kg</button></div><label for="s-sw">Start weight ('+u+')</label><input id="s-sw" type="number" inputmode="decimal" step="0.1" placeholder="Uses your first weigh-in if blank" value="'+(s.startWeight!=null?toDisp(s.startWeight):'')+'"><label for="s-gw">Goal weight ('+u+')</label><input id="s-gw" type="number" inputmode="decimal" step="0.1" value="'+(s.goalWeight!=null?toDisp(s.goalWeight):'')+'"></div>'+
-  '<div class="card"><h2>💰 Money</h2><label for="s-bud">Monthly spending budget ($, optional)</label><input id="s-bud" type="number" inputmode="decimal" step="0.01" min="0" placeholder="No budget" value="'+(s.monthlyBudget??'')+'"><label for="s-sn">Savings goal 1 name</label><input id="s-sn" type="text" value="'+esc(s.shortName)+'"><label for="s-sg">Savings goal 1 target ($)</label><input id="s-sg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.shortGoal??'')+'"><label for="s-ln">Savings goal 2 name</label><input id="s-ln" type="text" value="'+esc(s.longName)+'"><label for="s-lg">Savings goal 2 target ($)</label><input id="s-lg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.longGoal??'')+'"></div>'+
+  document.getElementById('v-settings').innerHTML='<form id="setForm"><div class="card"><h2>'+ic('food','var(--accent2)')+' Food &amp; fasting</h2><label for="s-carb">Daily carb target (g)</label><input id="s-carb" type="number" inputmode="numeric" min="0" step="1" value="'+(s.carbTarget??'')+'"><label for="s-fast">Daily fasting goal (hours)</label><input id="s-fast" type="number" inputmode="decimal" min="0" max="48" step="0.5" value="'+(s.fastGoal??'')+'"><p class="note">Fasting = overnight gap from the previous day\'s last meal to the day\'s first meal (meals need a time).</p></div>'+
+  '<div class="card"><h2>'+ic('ex','var(--green)')+' Exercise</h2><label for="s-ex">Weekly exercise goal (minutes)</label><input id="s-ex" type="number" inputmode="numeric" min="0" step="1" value="'+(s.weeklyExercise??'')+'"><p class="note">Weeks run Monday to Sunday.</p></div>'+
+  '<div class="card"><h2>'+ic('weight','var(--blue)')+' Weight</h2><label>Units</label><div class="seg"><button type="button" data-unit="lb" class="'+(u==='lbs'?'on':'')+'">lbs</button><button type="button" data-unit="kg" class="'+(u==='kg'?'on':'')+'">kg</button></div><label for="s-sw">Start weight ('+u+')</label><input id="s-sw" type="number" inputmode="decimal" step="0.1" placeholder="Uses your first weigh-in if blank" value="'+(s.startWeight!=null?toDisp(s.startWeight):'')+'"><label for="s-gw">Goal weight ('+u+')</label><input id="s-gw" type="number" inputmode="decimal" step="0.1" value="'+(s.goalWeight!=null?toDisp(s.goalWeight):'')+'"></div>'+
+  '<div class="card"><h2>'+ic('money','var(--purple)')+' Money</h2><label for="s-bud">Monthly spending budget ($, optional)</label><input id="s-bud" type="number" inputmode="decimal" step="0.01" min="0" placeholder="No budget" value="'+(s.monthlyBudget??'')+'"><label for="s-sn">Savings goal 1 name</label><input id="s-sn" type="text" value="'+esc(s.shortName)+'"><label for="s-sg">Savings goal 1 target ($)</label><input id="s-sg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.shortGoal??'')+'"><label for="s-ln">Savings goal 2 name</label><input id="s-ln" type="text" value="'+esc(s.longName)+'"><label for="s-lg">Savings goal 2 target ($)</label><input id="s-lg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.longGoal??'')+'"></div>'+
   '<button class="primary" type="submit" id="saveSettings">Save goals</button></form>'+
-  '<div class="card" style="margin-top:14px"><h2>💾 Backup</h2><p class="muted" style="margin-top:0">Your data lives only in this browser on this device. Export a backup file now and then, and import it to restore or move to another device.</p><div class="row"><button class="ghost" id="exportBtn">Export JSON</button><button class="ghost" id="importBtn">Import JSON</button></div><button class="ghost danger" id="resetBtn" style="width:100%;margin-top:10px">Erase all data</button></div><p class="note" style="text-align:center">Tip: on iPhone use Share → Add to Home Screen; on Android use ⋮ → Add to Home screen.</p>'}
+  '<div class="card" style="margin-top:14px"><h2>'+ic('backup','#9ba1b8')+' Backup</h2><p class="muted" style="margin-top:0">Your data lives only in this browser on this device. Export a backup file now and then, and import it to restore or move to another device.</p><div class="row"><button class="ghost" id="exportBtn">Export JSON</button><button class="ghost" id="importBtn">Import JSON</button></div><button class="ghost danger" id="resetBtn" style="width:100%;margin-top:10px">Erase all data</button></div><p class="note" style="text-align:center">Tip: on iPhone use Share → Add to Home Screen; on Android use ⋮ → Add to Home screen.</p>'}
 
 /* ---------- forms (bottom sheet) ---------- */
 var sheetBg=document.getElementById('sheetBg'),sheet=document.getElementById('sheet');
@@ -312,7 +315,7 @@ function form(type,id,preset){
     if(type==='savings'){var a2=num(v('f-amt'));if(a2==null||a2===0)return bad('f-amt','Enter an amount');o={goal:goal,amount:a2,note:v('f-note')}}
     o.date=date;
     if(ed){var keep={id:e.id,ts:e.ts};S[type]=S[type].map(function(x){return x.id===id?Object.assign(keep,o):x})}else{o.id=uid();o.ts=Date.now();S[type].push(o)}
-    save();closeSheet();render();toast(ed?'Saved':'Added ✓')});
+    save();closeSheet();render();toast(ed?'Saved':'Added')});
   if(!ed){var first=sheet.querySelector('input:not([type=date])');if(first&&window.matchMedia('(pointer:fine)').matches)first.focus()}
 }
 function bad(id,msg){var el=document.getElementById(id);el.style.borderColor='var(--red)';el.focus();toast(msg)}
@@ -325,7 +328,7 @@ document.getElementById('fab').onclick=function(){form({carbs:'carbs',exercise:'
 document.querySelector('main').addEventListener('click',function(e){
   var t;
   if((t=e.target.closest('[data-unit]'))){e.preventDefault();if(current==='settings')stashSettings();S.settings.unit=t.dataset.unit;save();render();return}
-  if((t=e.target.closest('[data-fast]'))){if(t.dataset.fast==='start'){S.settings.fastStart=Date.now();toast('Fast started ⏱')}else{S.settings.fastStart=null;toast('Manual start cleared')}save();render();return}
+  if((t=e.target.closest('[data-fast]'))){if(t.dataset.fast==='start'){S.settings.fastStart=Date.now();toast('Fast started')}else{S.settings.fastStart=null;toast('Manual start cleared')}save();render();return}
   if((t=e.target.closest('[data-contrib]'))){form('savings',null,t.dataset.contrib);return}
   if((t=e.target.closest('[data-mtab]'))){moneyTab=t.dataset.mtab;render();return}
   if((t=e.target.closest('[data-edit]'))){form(t.dataset.edit,t.dataset.id);return}
@@ -339,9 +342,9 @@ function stashSettings(){var s=S.settings,n;
   n=num(v('s-sw'));s.startWeight=n==null?null:fromDisp(n);n=num(v('s-gw'));s.goalWeight=n==null?null:fromDisp(n);
   n=num(v('s-bud'));s.monthlyBudget=n&&n>0?n:null;s.shortName=v('s-sn')||'Short-term goal';s.longName=v('s-ln')||'Long-term goal';
   n=num(v('s-sg'));s.shortGoal=n==null?0:n;n=num(v('s-lg'));s.longGoal=n==null?0:n}
-document.querySelector('main').addEventListener('submit',function(e){if(e.target.id==='setForm'){e.preventDefault();stashSettings();save();toast('Goals saved ✓');show('home')}});
+document.querySelector('main').addEventListener('submit',function(e){if(e.target.id==='setForm'){e.preventDefault();stashSettings();save();toast('Goals saved');show('home')}});
 function exportData(){var data=JSON.stringify(Object.assign({app:'wellbeing-tracker',version:1,exported:new Date().toISOString()},S),null,2);var blob=new Blob([data],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wellbeing-backup-'+today()+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);toast('Backup downloaded')}
-document.getElementById('importFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var p=JSON.parse(r.result);if(!p||typeof p!=='object'||!p.settings)throw new Error('bad');if(!confirm('Replace current data with this backup?'))return;S=merge(p);save();render();toast('Backup restored ✓')}catch(err){alert('That file doesn\'t look like a Well-being Tracker backup.')}};r.readAsText(f);this.value=''});
+document.getElementById('importFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var p=JSON.parse(r.result);if(!p||typeof p!=='object'||!p.settings)throw new Error('bad');if(!confirm('Replace current data with this backup?'))return;S=merge(p);save();render();toast('Backup restored')}catch(err){alert('That file doesn\'t look like a Well-being Tracker backup.')}};r.readAsText(f);this.value=''});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet()});
 window.addEventListener('storage',function(e){if(e.key===KEY){S=load();render()}});
 show('home');
