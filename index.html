@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d0f16'/%3E%3Cpath d='M50 18 82 46H73V80H58V60H42V80H27V46H18Z' fill='%238ef5a8'/%3E%3C/svg%3E">
 <title>Well-being Tracker</title>
 <style>
-:root{color-scheme:dark;--bg:#0d0f16;--card:#181b26;--ink:#f4f5fa;--muted:#9ba1b8;--line:#2a2f42;--accent:#8ef5a8;--on-accent:#06240f;--accent2:#ffb21e;--ex:#ff5c5c;--blue:#5aa2ff;--purple:#b26bff;--red:#ff7a1a;--r:18px;--nav:68px}
+:root{color-scheme:dark;--bg:#0d0f16;--card:#181b26;--ink:#f4f5fa;--muted:#9ba1b8;--line:#2a2f42;--accent:#8ef5a8;--on-accent:#06240f;--accent2:#ffb21e;--ex:#ff5c5c;--blue:#4f7bff;--fast:#7dd3fc;--purple:#b26bff;--red:#ff7a1a;--r:18px;--nav:68px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 body{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 16px)}
@@ -174,15 +174,15 @@ function fastStartInfo(){var l=lastMealTs(),m=S.settings.fastStart,n=Date.now();
 function fmtDur(ms){var m=Math.max(0,Math.floor(ms/60000));return Math.floor(m/60)+'h '+pad(m%60)+'m'}
 function fmtWhen(ts){var d=new Date(ts),s=iso(d);return(s===today()?'today':fmtDay(s).toLowerCase()==='yesterday'?'yesterday':fmtShort(s))+' at '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}
 function fastCard(go){var g=S.settings.fastGoal||0,gm=g*3600000,fi=fastStartInfo(),on=overnightFast(today());
-  var h='<div class="card"'+(go?' data-go="carbs"':'')+'><h2><span class="dot" style="background:rgba(142,245,168,.16)">'+ic('fast','var(--accent)',20)+'</span>Fasting<span class="tag">Goal '+g+' h</span></h2>';
+  var h='<div class="card"'+(go?' data-go="carbs"':'')+'><h2><span class="dot" style="background:rgba(125,211,252,.16)">'+ic('fast','var(--fast)',20)+'</span>Fasting<span class="tag">Goal '+g+' h</span></h2>';
   if(!fi&&on==null)return h+'<div class="muted">Log meals with a time and your overnight fast (last meal → first meal) will show here.</div>'+fastBtns()+'</div>';
-  if(fi){var el=Date.now()-fi.ts;h+='<div class="big" id="liveFast">'+fmtDur(el)+' <small>fasting now</small></div>'+bar(pct(el,gm),'var(--accent)')+'<div class="muted">'+(fi.manual?'Fast started ':'Since last meal ')+fmtWhen(fi.ts)+(el>=gm&&gm>0?' · goal reached'+ok():gm>0?' · '+fmtDur(gm-el)+' to goal':'')+'</div>'}
+  if(fi){var el=Date.now()-fi.ts;h+='<div class="big" id="liveFast">'+fmtDur(el)+' <small>fasting now</small></div>'+bar(pct(el,gm),'var(--fast)')+'<div class="muted">'+(fi.manual?'Fast started ':'Since last meal ')+fmtWhen(fi.ts)+(el>=gm&&gm>0?' · goal reached'+ok():gm>0?' · '+fmtDur(gm-el)+' to goal':'')+'</div>'}
   h+='<div class="muted" style="margin-top:10px">Overnight fast today: <b style="color:var(--ink)">'+(on!=null?fmtDur(on)+(gm>0&&on>=gm?ok():''):'—')+'</b>'+(on==null?' <span>(needs yesterday\'s last meal + today\'s first meal)</span>':'')+'</div>';
   return h+fastBtns()+'</div>'}
-function fastBtns(){return'<div class="fbtns"><button class="ghost" data-fast="start">'+ic('fast','var(--accent)',16)+' Start fast now</button>'+(S.settings.fastStart?'<button class="ghost" data-fast="clear">Clear manual start</button>':'')+'</div>'}
+function fastBtns(){return'<div class="fbtns"><button class="ghost" data-fast="start">'+ic('fast','var(--fast)',16)+' Start fast now</button>'+(S.settings.fastStart?'<button class="ghost" data-fast="clear">Clear manual start</button>':'')+'</div>'}
 function fastHistory(){var g=S.settings.fastGoal||0,gm=g*3600000,h='<div class="card"><h2>Overnight fasts<span class="tag">last 7 days</span></h2>',any=false;
   for(var i=0;i<7;i++){var d=new Date();d.setDate(d.getDate()-i);var s=iso(d),f=overnightFast(s);if(f!=null)any=true;
-    h+='<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>'+fmtDay(s)+'</span><b>'+(f!=null?fmtDur(f)+(gm>0&&f>=gm?ok():''):'<span class="muted">—</span>')+'</b></div>'+bar(f!=null?pct(f,gm||1):0,gm>0&&f>=gm?'var(--accent)':'#6b7390')+'</div>'}
+    h+='<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>'+fmtDay(s)+'</span><b>'+(f!=null?fmtDur(f)+(gm>0&&f>=gm?ok():''):'<span class="muted">—</span>')+'</b></div>'+bar(f!=null?pct(f,gm||1):0,gm>0&&f>=gm?'var(--fast)':'#3f6f8c')+'</div>'}
   if(!any)h+='<p class="note">Each day\'s fast is measured from the previous day\'s last meal to that day\'s first meal.</p>';
   return h+'</div>'}
 setInterval(function(){if((current==='home'||current==='carbs')&&!document.getElementById('sheetBg').classList.contains('open'))render()},30000);
@@ -200,7 +200,7 @@ function carbCard(){var t=carbsOn(today()),g=S.settings.carbTarget||0,left=g-t;
 function exCard(){var m=weekExercise(),g=S.settings.weeklyExercise||0;
   return'<div class="card" data-go="exercise"><h2><span class="dot" style="background:rgba(255,92,92,.18)">'+ic('ex','var(--ex)',20)+'</span>Exercise this week<span class="tag">Goal '+g+' min</span></h2><div class="big">'+m+' <small>/ '+g+' min</small></div>'+bar(pct(m,g),'var(--ex)')+'<div class="muted">'+(m===0?'No workouts yet this week. Every minute counts!':m>=g?'Weekly goal reached!'+ok():(g-m)+' min to go this week')+'</div></div>'}
 function wCard(){var l=latestWeight(),st=startWeight(),gw=S.settings.goalWeight,u=unit();
-  var h='<div class="card" data-go="weight"><h2><span class="dot" style="background:rgba(90,162,255,.18)">'+ic('weight','var(--blue)',20)+'</span>Weight<span class="tag">Goal '+(gw!=null?toDisp(gw)+' '+u:'not set')+'</span></h2>';
+  var h='<div class="card" data-go="weight"><h2><span class="dot" style="background:rgba(79,123,255,.18)">'+ic('weight','var(--blue)',20)+'</span>Weight<span class="tag">Goal '+(gw!=null?toDisp(gw)+' '+u:'not set')+'</span></h2>';
   if(!l)return h+'<div class="muted">Log your first weigh-in to start tracking progress.</div></div>';
   h+='<div class="big">'+toDisp(l.lbs)+' <small>'+u+' · '+fmtDay(l.date)+'</small></div>';
   if(gw!=null&&st!=null&&st!==gw){var p=pct(st-l.lbs,st-gw);h+=bar(p,'var(--blue)')+'<div class="muted">'+(st>gw?r1(toDisp(st)-toDisp(l.lbs))+' '+u+' lost · '+Math.max(0,r1(toDisp(l.lbs)-toDisp(gw)))+' '+u+' to go':Math.round(p)+'% to goal')+'</div>'}
@@ -242,9 +242,9 @@ function chart(){var w=sortedWeights();if(w.length<2)return'<div class="muted" s
   var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">';
   for(var i=0;i<=3;i++){var v=mn+(mx-mn)*i/3,y=Y(v);s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="#2a2f42"/><text x="'+(pl-5)+'" y="'+(y+4)+'" font-size="10" text-anchor="end" fill="#9ba1b8">'+Math.round(v)+'</text>'}
   if(gw!=null){var gy=Y(toDisp(gw));s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+gy+'" y2="'+gy+'" stroke="#8ef5a8" stroke-width="1.5" stroke-dasharray="5 4"/><text x="'+(W-pr)+'" y="'+(gy-5)+'" font-size="10" text-anchor="end" fill="#8ef5a8">Goal '+toDisp(gw)+'</text>'}
-  s+='<polygon points="'+pl+','+(H-pb)+' '+pts.join(' ')+' '+X(w[w.length-1]).toFixed(1)+','+(H-pb)+'" fill="rgba(90,162,255,.15)"/>';
-  s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#5aa2ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
-  w.forEach(function(e){s+='<circle cx="'+X(e).toFixed(1)+'" cy="'+Y(toDisp(e.lbs)).toFixed(1)+'" r="3.5" fill="#0d0f16" stroke="#5aa2ff" stroke-width="2"/>'});
+  s+='<polygon points="'+pl+','+(H-pb)+' '+pts.join(' ')+' '+X(w[w.length-1]).toFixed(1)+','+(H-pb)+'" fill="rgba(79,123,255,.15)"/>';
+  s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#4f7bff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+  w.forEach(function(e){s+='<circle cx="'+X(e).toFixed(1)+'" cy="'+Y(toDisp(e.lbs)).toFixed(1)+'" r="3.5" fill="#0d0f16" stroke="#4f7bff" stroke-width="2"/>'});
   s+='<text x="'+pl+'" y="'+(H-6)+'" font-size="10" fill="#9ba1b8">'+fmtShort(w[0].date)+'</text><text x="'+(W-pr)+'" y="'+(H-6)+'" font-size="10" text-anchor="end" fill="#9ba1b8">'+fmtShort(w[w.length-1].date)+'</text></svg>';return s}
 function rWeight(){var h=wCard().replace('data-go="weight"',''),u=unit(),l=latestWeight(),st=startWeight(),gw=S.settings.goalWeight;
   h+='<div class="card"><h2>Trend<span class="tag"><span class="seg" style="display:inline-flex;padding:3px"><button data-unit="lb" class="'+(u==='lbs'?'on':'')+'" style="min-height:32px;padding:0 12px">lbs</button><button data-unit="kg" class="'+(u==='kg'?'on':'')+'" style="min-height:32px;padding:0 12px">kg</button></span></span></h2>'+chart();
