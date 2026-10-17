@@ -7,19 +7,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Well-being">
-<meta name="application-name" content="Well-being">
+<meta name="apple-mobile-web-app-title" content="Well Being">
+<meta name="application-name" content="Well Being">
 <meta name="format-detection" content="telephone=no">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0f16'/%3E%3Cpath d='M50 18 82 46H73V80H58V60H42V80H27V46H18Z' fill='%238ef5a8'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d0f16'/%3E%3Cpath d='M50 18 82 46H73V80H58V60H42V80H27V46H18Z' fill='%238ef5a8'/%3E%3C/svg%3E">
-<title>Well-being Tracker</title>
+<title>Well Being</title>
 <style>
 :root{color-scheme:dark;--bg:#0d0f16;--card:#181b26;--ink:#f4f5fa;--muted:#9ba1b8;--line:#2a2f42;--accent:#8ef5a8;--on-accent:#06240f;--accent2:#ffb21e;--ex:#ff5c5c;--blue:#4f7bff;--fast:#7dd3fc;--know:#2dd4bf;--skill:#ff5cc8;--spirit:#ffe27a;--purple:#b26bff;--red:#ff7a1a;--r:18px;--nav:68px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 body{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 16px)}
 header{position:sticky;top:0;z-index:5;background:rgba(13,15,22,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:calc(env(safe-area-inset-top) + 12px) 18px 10px;display:flex;align-items:center;justify-content:space-between}
-header h1{font-size:22px;margin:0;letter-spacing:-.3px}
+header h1{font-size:24px;margin:0;letter-spacing:-.3px}
 header .sub{font-size:13px;color:var(--muted)}
 .iconbtn{width:44px;height:44px;border-radius:50%;border:0;background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.4);font-size:20px;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
 main{max-width:640px;margin:0 auto;padding:4px 14px}
@@ -83,7 +83,7 @@ svg.chart{width:100%;height:auto;display:block}
 </head>
 <body>
 <header>
-  <div><h1 id="title">Today</h1><div class="sub" id="subtitle"></div></div>
+  <div><h1 id="title">Well Being</h1><div class="sub" id="subtitle"></div></div>
   <button class="iconbtn" id="settingsBtn" aria-label="Settings"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="#9ba1b8" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.47.47 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.48.48 0 0 0-.12-.61l-2.01-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg></button>
 </header>
 <main>
@@ -274,12 +274,12 @@ function keyChips(name,opts,val){return'<div class="chips" data-chips="'+name+'"
 
 /* ---------- render ---------- */
 var current='home';
-var TITLES={home:'Today',carbs:'Food',exercise:'Exercise',weight:'Weight',money:'Money',knowledge:'Knowledge',skills:'Skills',spiritual:'Spiritual',settings:'Settings'};
+var TITLES={home:'Well Being',carbs:'Food',exercise:'Exercise',weight:'Weight',money:'Money',knowledge:'Knowledge',skills:'Skills',spiritual:'Spiritual',settings:'Settings'};
 var MORE=[{v:'knowledge',ic:'book',c:'var(--know)'},{v:'skills',ic:'bulb',c:'var(--skill)'},{v:'spiritual',ic:'lotus',c:'var(--spirit)'}];
 function updateMore(){var b=document.getElementById('moreBtn'),m=MORE.filter(function(x){return x.v===current})[0];b.classList.toggle('on',!!m);b.style.setProperty('--c',m?m.c:'var(--accent)');b.querySelector('.i').innerHTML=ic(m?m.ic:'grid',null,24);b.querySelector('.lbl').textContent=m?TITLES[m.v]:'More'}
 function show(v){current=v;document.querySelectorAll('.view').forEach(function(el){el.classList.toggle('active',el.id==='v-'+v)});document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('on',b.dataset.v===v)});document.getElementById('title').textContent=TITLES[v];document.getElementById('fab').classList.toggle('show',['carbs','exercise','weight','money','knowledge','skills','spiritual'].indexOf(v)>=0);updateMore();render();window.scrollTo(0,0)}
 function render(){
-  document.getElementById('subtitle').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('subtitle').textContent=(current==='home'?'Today · ':'')+new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
   ({home:rHome,carbs:rCarbs,exercise:rExercise,weight:rWeight,money:rMoney,knowledge:rKnowledge,skills:rSkills,spiritual:rSpiritual,settings:rSettings})[current]();
 }
 function carbCard(){var t=carbsOn(today()),g=S.settings.carbTarget||0,left=g-t;
