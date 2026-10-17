@@ -1,6 +1,6 @@
 {
-  "name": "Well Being",
-  "short_name": "Well Being",
+  "name": "GoalWell",
+  "short_name": "GoalWell",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
