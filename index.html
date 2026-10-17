@@ -76,7 +76,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .sheet h3{margin:0 0 4px;font-size:20px}
 .btnrow{display:flex;gap:10px;margin-top:18px}.btnrow>*{flex:1}
 .hidden{display:none!important}
-.toast{position:fixed;left:50%;bottom:calc(var(--nav) + 90px);transform:translateX(-50%);background:var(--accent);color:var(--on-accent);font-weight:600;padding:10px 18px;border-radius:99px;font-size:14px;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav) + 90px);transform:translateX(-50%);background:var(--accent);color:var(--on-accent);font-weight:600;padding:10px 18px;border-radius:99px;font-size:14px;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none}.toast.long{width:max-content;max-width:calc(100vw - 32px);border-radius:16px;text-align:center;line-height:1.35;overflow-wrap:anywhere}
 .toast.show{opacity:1}
 svg.chart{width:100%;height:auto;display:block}
 .pos{color:var(--accent)}.neg{color:var(--red)}
@@ -161,7 +161,7 @@ function fromDisp(v){return v==null?null:(S.settings.unit==='kg'?v/0.45359237:v)
 function byDateDesc(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.ts||0)-(a.ts||0)}
 function groupByDay(arr){var g={},o=[];arr.slice().sort(byDateDesc).forEach(function(e){if(!g[e.date]){g[e.date]=[];o.push(e.date)}g[e.date].push(e)});return o.map(function(d){return{date:d,items:g[d]}})}
 function emptyBox(icon,msg){return'<div class="empty"><div class="e">'+icon+'</div>'+msg+'</div>'}
-var toastT;function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},1800)}
+var toastT;function toast(m,ms){var t=document.getElementById('toast');t.textContent=m;t.classList.toggle('long',m.length>38);t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},ms||1800)}
 
 /* ---------- computations ---------- */
 function carbsOn(d){return S.carbs.filter(function(e){return e.date===d}).reduce(function(s,e){return s+(+e.carbs||0)},0)}
@@ -343,12 +343,58 @@ function parseWDate(raw){if(raw==null||String(raw).trim()==='')return null;var t
 function addWeightReading(lbs,dt,source){if(lbs==null||!(lbs>=50&&lbs<=700))return'invalid';var date=dt&&dt.date||today(),ts=dt&&dt.ts||Date.now();if(date>today())return'invalid';
   if(S.weights.some(function(e){return e.date===date&&Math.abs(e.lbs-lbs)<0.05}))return'dup';
   S.weights.push({id:uid(),ts:ts,date:date,lbs:lbs,source:source||'Wyze/Health'});return'added'}
-function urlWeightImport(){var q;try{q=new URLSearchParams(location.search)}catch(e){return false}if(!q.has('weight'))return false;
-  var raw=q.get('weight'),lbs=parseWNum(raw,q.get('unit')),dt=parseWDate(q.get('date'))||null;
-  ['weight','date','unit','source'].forEach(function(k){q.delete(k)});try{history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash)}catch(e){}
-  var r=addWeightReading(lbs,dt,'Wyze/Health');
-  if(r==='invalid'){show('home');toast(lbs>=50&&lbs<=700?'Weight sync skipped: date is in the future':'Weight sync skipped: “'+String(raw).slice(0,20)+'” is not a valid weight (50–700 lb)');return true}
-  if(r==='added')save();show('weight');toast((r==='added'?'Weight synced: ':'Already synced: ')+wd(lbs)+' '+wUnitLbl());return true}
+function wClean(x){if(x==null)return'';var t=String(x);
+  for(var i=0;i<3&&/%[0-9a-f]{2}/i.test(t);i++){try{t=decodeURIComponent(t.replace(/\+/g,' '))}catch(e){break}}
+  t=t.replace(/\+/g,' ');try{t=t.normalize('NFKC')}catch(e){}
+  return t.replace(/[\u200B-\u200D\u2060\uFEFF]/g,'').replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000\t\r\n]/g,' ').replace(/[\u2212\u2012\u2013\u2014\uFE63\uFF0D]/g,'-').replace(/[\u2018\u2019\u201A\u201B\u2032]/g,"'").replace(/[\u201C\u201D\u201E\u2033\u00AB\u00BB]/g,'"').replace(/\u2024|\uFF0E/g,'.').replace(/\s+/g,' ').trim()}
+var W_MON=/(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s*$/i;
+function wNumbers(t){var re=/\d{1,3}(?:,\d{3})+(?:\.\d+)?(?![\d,])|\d+,\d{1,2}(?![\d.,])|\d*\.\d+|\d+/g,m,out=[];
+  while((m=re.exec(t))){var tok=m[0],v=/^\d+,\d{1,2}$/.test(tok)?parseFloat(tok.replace(',','.')):parseFloat(tok.replace(/,/g,''));
+    out.push({v:v,s:m.index,e:m.index+tok.length,tok:tok,dec:/[.,]\d{1,2}$/.test(tok)&&!/,\d{3}$/.test(tok)})}return out}
+function wUnits(t){var re=/(kilograms?|kilos?|kgs?)(?![a-z])|(pounds?|lbs?)(?![a-z])|(#)|(stones?|st)(?![a-z])/gi,m,out=[];
+  while((m=re.exec(t))){var pre=t[m.index-1]||' ';if(!m[3]&&/[a-z]/i.test(pre))continue;out.push({u:m[1]?'kg':(m[2]||m[3])?'lb':'st',s:m.index,e:m.index+m[0].length})}return out}
+function recentLbs(){var w=sortedWeights().slice(-5).map(function(e){return e.lbs}).sort(function(a,b){return a-b});return w.length?w[Math.floor(w.length/2)]:null}
+/* returns {ok,lbs,n,unit,how,dateText,reason} */
+function parseWeightInput(raw,unitParam,useHistory){var t=wClean(raw),nums=wNumbers(t),units=wUnits(t),pick=null,unit=null;
+  if(!nums.length)return{ok:false,reason:'noread',clean:t};
+  // 1) number directly before a unit (or right after "#"-style suffix)
+  for(var i=0;i<units.length&&!pick;i++){var u=units[i];for(var j=nums.length-1;j>=0;j--){var n=nums[j];if(n.e<=u.s&&/^\s*$/.test(t.slice(n.e,u.s))){pick=n;unit=u.u;break}}}
+  // 2) otherwise the first number that looks like a weight (not part of a time, a year, or a date)
+  if(!pick){var cands=nums.filter(function(n){var b=t.slice(0,n.s),a=t.slice(n.e);
+      if(/:\s*$/.test(b)&&/\d\s*$/.test(b.replace(/:\s*$/,'')))return false; if(/^\s*:\s*\d/.test(a))return false;
+      if(/^\d{4}$/.test(n.tok)&&n.v>=1900&&n.v<=2100)return false;
+      if(/\d\s*[-\/]\s*$/.test(b)||/^\s*[-\/]\s*\d/.test(a))return false;
+      if(W_MON.test(b)&&!n.dec&&n.v<=31)return false;
+      if(/^\s*(am|pm)\b/i.test(a))return false;
+      return true});
+    pick=cands.filter(function(n){return n.v>=20&&n.v<=700})[0]||cands[0]||null;
+    if(pick&&units.length)unit=units[0].u}
+  if(!pick)return{ok:false,reason:'noread',clean:t};
+  var n=pick.v,how='';
+  if(!unit&&unitParam){var up=wClean(unitParam).toLowerCase();unit=/^(kg|kgs|kilo|kilos|kilogram|kilograms)$/.test(up)?'kg':/^(st|stone|stones)$/.test(up)?'st':'lb';how='unit param'}
+  if(!unit&&useHistory&&n>=23&&n<=320){var r=recentLbs();if(r&&r/n>=2.0&&r/n<=2.45){unit='kg';how='guessed kg from your recent weights'}}
+  unit=unit||'lb';var lbs=unit==='kg'?n/KG:unit==='st'?n*14:n;
+  if(unit==='st'){var after=t.slice(pick.e).match(/^\s*(?:stones?|st)\s*(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)?/i);if(after)lbs+=parseFloat(after[1])}
+  var dateText=t.slice(0,pick.s).replace(/[\s,:;\-–]+$/,'').trim();
+  lbs=Math.round(lbs*100)/100;return{ok:lbs>=50&&lbs<=700,lbs:lbs,n:n,unit:unit,how:how,clean:t,dateText:dateText,reason:lbs>=50&&lbs<=700?'':'range'}}
+var W_KEYS=['weight','w','value','wt','bodymass','body_mass'];
+function lastSyncNote(){var x;try{x=JSON.parse(localStorage.getItem('goalwell.lastSync')||'null')}catch(e){}if(!x)return'';return'<p class="note" id="lastSync">Last sync link ('+esc(new Date(x.at).toLocaleString())+'): received <span style="color:var(--ink);overflow-wrap:anywhere">“'+esc(x.raw)+'”</span> → '+esc(x.result==='added'?'added':x.result==='dup'?'already logged':String(x.result))+'</p>'}
+function urlWeightImport(){var q;try{q=new URLSearchParams(location.search)}catch(e){return false}
+  var key=null;q.forEach(function(v,k){if(key==null&&W_KEYS.indexOf(k.toLowerCase())>=0)key=k});if(key==null)return false;
+  var raw=q.get(key);if(location.hash&&!/[a-z0-9]/i.test(location.hash.slice(1)))raw+=' #';
+  var gp=function(n){var f=null;q.forEach(function(v,k){if(f==null&&k.toLowerCase()===n)f=v});return f};
+  try{console.info('[GoalWell] weight sync query:',location.search+location.hash)}catch(e){}
+  var res=parseWeightInput(raw,gp('unit'),true),dRaw=gp('date'),dt=dRaw!=null&&wClean(dRaw)?parseWDate(wClean(dRaw)):null;
+  if(!dt&&res.dateText&&/[a-z]{3}|\d[-\/.]\d/i.test(res.dateText))dt=parseWDate(res.dateText);
+  var keys=[];q.forEach(function(v,k){if(W_KEYS.concat(['date','unit','source']).indexOf(k.toLowerCase())>=0)keys.push(k)});keys.forEach(function(k){q.delete(k)});
+  try{history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:''))}catch(e){}
+  var shown=String(raw).length>40?String(raw).slice(0,40)+'…':String(raw),msg,r=null;
+  if(!res.ok&&res.reason==='noread')msg='Weight sync skipped: couldn\'t read "'+shown+'"';
+  else if(!res.ok)msg='Weight sync skipped: read '+f1(res.n)+' '+res.unit+(res.unit!=='lb'?' (= '+f1(res.lbs)+' lb)':'')+', outside 50–700 lb. Received "'+shown+'"';
+  else{r=addWeightReading(res.lbs,dt,'Wyze/Health');if(r==='invalid')msg='Weight sync skipped: date is in the future ("'+String(dRaw||res.dateText).slice(0,30)+'")'}
+  try{localStorage.setItem('goalwell.lastSync',JSON.stringify({at:new Date().toISOString(),query:location.search+location.hash||'',raw:String(raw).slice(0,200),result:msg||r,lbs:res.lbs||null,unit:res.unit||null}))}catch(e){}
+  if(msg){try{console.info('[GoalWell] '+msg)}catch(e){}show('home');toast(msg,7000);return true}
+  if(r==='added')save();show('weight');toast((r==='added'?'Weight synced: ':'Already synced: ')+wd(res.lbs)+' '+wUnitLbl()+(res.how==='guessed kg from your recent weights'?' (read as '+f1(res.n)+' kg)':''),r==='added'&&res.how?4000:2200);return true}
 function csvRows(text){var rows=[],row=[],f='',q=false;text=text.replace(/^\uFEFF/,'');var sep=(text.split(/\r?\n/)[0].split(';').length>text.split(/\r?\n/)[0].split(',').length)?';':(text.indexOf('\t')>=0&&text.split(/\r?\n/)[0].indexOf(',')<0?'\t':',');
   for(var i=0;i<text.length;i++){var c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===sep){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.some(function(x){return x.trim()}))rows.push(row);row=[]}else f+=c}
   row.push(f);if(row.some(function(x){return x.trim()}))rows.push(row);return rows}
@@ -446,7 +492,7 @@ function rMoney(){var h=mCard().replace('data-go="money"',''),t=monthTotals();
 function rSettings(){var s=S.settings,u=unit();
   document.getElementById('v-settings').innerHTML='<form id="setForm"><div class="card"><h2>'+ic('food','var(--accent2)')+' Energy &amp; fasting</h2><label for="s-carb">Daily carb target (g)</label><input id="s-carb" type="number" inputmode="numeric" min="0" step="1" value="'+(s.carbTarget??'')+'"><label for="s-fast">Daily fasting goal (hours)</label><input id="s-fast" type="number" inputmode="decimal" min="0" max="48" step="0.5" value="'+(s.fastGoal??'')+'"><p class="note">Fasting = overnight gap from the previous day\'s last meal to the day\'s first meal (meals need a time).</p></div>'+
   '<div class="card"><h2>'+ic('ex','var(--ex)')+' Exercise</h2><label for="s-ex">Weekly exercise goal (minutes)</label><input id="s-ex" type="number" inputmode="numeric" min="0" step="1" value="'+(s.weeklyExercise??'')+'"><p class="note">Weeks run Monday to Sunday.</p></div>'+
-  '<div class="card"><h2>'+ic('weight','var(--blue)')+' Weight</h2><label>Units</label><div class="seg"><button type="button" data-unit="lb" class="'+(u==='lbs'?'on':'')+'">lbs</button><button type="button" data-unit="kg" class="'+(u==='kg'?'on':'')+'">kg</button></div><label for="s-sw">Start weight ('+u+')</label><input id="s-sw" type="number" inputmode="decimal" step="0.1" placeholder="Uses your first weigh-in if blank" value="'+(s.startWeight!=null?wd(s.startWeight):'')+'"><label for="s-gw">Goal weight ('+u+')</label><input id="s-gw" type="number" inputmode="decimal" step="0.1" value="'+(s.goalWeight!=null?wd(s.goalWeight):'')+'"><label>Import weigh-ins</label><button type="button" class="ghost" id="wcsvBtn" style="width:100%">Import Wyze/Health CSV</button><input type="file" id="wcsvFile" accept=".csv,text/csv,text/plain" class="hidden"><p class="note">Auto-sync from an iPhone Shortcut: open <span style="word-break:break-all;color:var(--ink)">'+esc(location.href.split(/[?#]/)[0])+'?weight=VALUE&amp;unit=lb</span> (add &amp;date=YYYY-MM-DD if you like). Duplicates are skipped.</p></div>'+
+  '<div class="card"><h2>'+ic('weight','var(--blue)')+' Weight</h2><label>Units</label><div class="seg"><button type="button" data-unit="lb" class="'+(u==='lbs'?'on':'')+'">lbs</button><button type="button" data-unit="kg" class="'+(u==='kg'?'on':'')+'">kg</button></div><label for="s-sw">Start weight ('+u+')</label><input id="s-sw" type="number" inputmode="decimal" step="0.1" placeholder="Uses your first weigh-in if blank" value="'+(s.startWeight!=null?wd(s.startWeight):'')+'"><label for="s-gw">Goal weight ('+u+')</label><input id="s-gw" type="number" inputmode="decimal" step="0.1" value="'+(s.goalWeight!=null?wd(s.goalWeight):'')+'"><label>Import weigh-ins</label><button type="button" class="ghost" id="wcsvBtn" style="width:100%">Import Wyze/Health CSV</button><input type="file" id="wcsvFile" accept=".csv,text/csv,text/plain" class="hidden"><p class="note">Auto-sync from an iPhone Shortcut: open <span style="word-break:break-all;color:var(--ink)">'+esc(location.href.split(/[?#]/)[0])+'?weight=VALUE&amp;unit=lb</span> (add &amp;date=YYYY-MM-DD if you like). Duplicates are skipped.</p>'+lastSyncNote()+'</div>'+
   '<div class="card"><h2>'+ic('money','var(--purple)')+' Money</h2><label for="s-bud">Monthly spending budget ($, optional)</label><input id="s-bud" type="number" inputmode="decimal" step="0.01" min="0" placeholder="No budget" value="'+(s.monthlyBudget??'')+'"><label for="s-sn">Savings goal 1 name</label><input id="s-sn" type="text" value="'+esc(s.shortName)+'"><label for="s-sg">Savings goal 1 target ($)</label><input id="s-sg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.shortGoal??'')+'"><label for="s-ln">Savings goal 2 name</label><input id="s-ln" type="text" value="'+esc(s.longName)+'"><label for="s-lg">Savings goal 2 target ($)</label><input id="s-lg" type="number" inputmode="decimal" step="0.01" min="0" value="'+(s.longGoal??'')+'"></div>'+
   '<div class="card"><h2>'+ic('book','var(--know)')+' Knowledge</h2><label for="s-read">Daily reading goal (minutes)</label><input id="s-read" type="number" inputmode="numeric" min="0" step="5" value="'+(s.readGoal??'')+'"><label for="s-bk">Books to finish per week</label><input id="s-bk" type="number" inputmode="numeric" min="0" step="1" value="'+(s.booksGoal??'')+'"></div>'+
   '<div class="card"><h2>'+ic('bulb','var(--skill)')+' Skills</h2><label for="s-skd">Default weekly goal for new skills (minutes)</label><input id="s-skd" type="number" inputmode="numeric" min="0" step="5" value="'+(s.skillGoalDefault??'')+'"><p class="note">Each skill\'s own goal, name, and deletion are in the Skills tab (Edit on each skill).</p></div>'+
